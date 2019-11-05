@@ -77,15 +77,41 @@ Main:
 	LOAD   Mask5
 	OUT    SONAREN
 	
-TurnLoop:	
-	IN 	   DIST5
-	SUB    Ft4
-	JNEG   LoopOut
-	LOAD   FMid
-	OUT    LVELCMD
-	LOAD   RMid
-	OUT    RVELCMD
-	JUMP   TurnLoop
+MakeSquare:
+	LOADI  45
+	STORE  Heading
+	CALL   Turn        ; initial Left Turn to set up Diamond
+	
+	; Do 4 times
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  Heading
+	CALL   Turn
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  Heading
+	CALL   Turn
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  Heading
+	CALL   Turn
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  Heading
+	CALL   Turn
+	
+	RETURN
+	
+	
+	
 
 LoopOut: 
     CLI    &B1111      ; disable all interrupts
