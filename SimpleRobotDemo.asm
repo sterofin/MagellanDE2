@@ -74,25 +74,29 @@ Main:
 	; If you want to take manual control of the robot,
 	; execute CLI &B0010 to disable the timer interrupt.
 
-	LOAD   Mask5
-	OUT    SONAREN
+	LOADI	293
+	STORE	MoveDistance
+	CALL	MoveForDistance
 	
-TurnLoop:	
-	IN 	   DIST5
-	SUB    Ft4
-	JNEG   LoopOut
-	LOAD   FMid
-	OUT    LVELCMD
-	LOAD   RMid
-	OUT    RVELCMD
-	JUMP   TurnLoop
-
-LoopOut: 
-    CLI    &B1111      ; disable all interrupts
-	LOAD   Zero        ; Stop everything.
-	OUT    LVELCMD
-	OUT    RVELCMD
-	OUT    SONAREN
+; 	LOAD   Mask5
+; 	OUT    SONAREN
+; 	
+; TurnLoop:	
+; 	IN 	   DIST5
+; 	SUB    Ft4
+; 	JNEG   LoopOut
+; 	LOAD   FMid
+; 	OUT    LVELCMD
+; 	LOAD   RMid
+; 	OUT    RVELCMD
+; 	JUMP   TurnLoop
+; 
+; LoopOut: 
+;     CLI    &B1111      ; disable all interrupts
+; 	LOAD   Zero        ; Stop everything.
+; 	OUT    LVELCMD
+; 	OUT    RVELCMD
+; 	OUT    SONAREN
 	
 InfLoop:
 	JUMP   InfLoop
@@ -130,7 +134,28 @@ Turn:
 
 ;Move a certain amount of distance specified by a number stored in MoveDistance.
 MoveForDistance:
-
+	OUT		TIMER
+	IN		THETA
+	STORE	DTheta
+	LOAD	FMid
+	STORE	DVel
+Distloop:
+	CALL	ControlMovement
+	IN 		TIMER
+	STORE 	m16sA
+	LOADI	35
+	STORE	m16sB
+	CALL	Mult16s
+	LOAD	MoveDistance
+	SUB		mres16sL
+	OUT		SSEG1
+	JPOS	Distloop
+	
+	LOAD	Zero
+	STORE	DVel
+	CALL	ControlMovement
+	RETURN
+	
 	
 ; Control code.  If called repeatedly, this code will attempt
 ; to control the robot to face the angle specified in DTheta
