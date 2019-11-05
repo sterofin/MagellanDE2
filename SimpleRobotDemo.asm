@@ -124,6 +124,13 @@ CTimer_ISR:
 	CALL   ControlMovement
 	RETI   ; return from ISR
 	
+;Rotates the robot. Place relative angle in MoveHeading, then call.
+Turn:
+	
+
+;Move a certain amount of distance specified by a number stored in MoveDistance.
+MoveForDistance:
+
 	
 ; Control code.  If called repeatedly, this code will attempt
 ; to control the robot to face the angle specified in DTheta
@@ -722,6 +729,9 @@ RFast:    DW -500
 MinBatt:  DW 140       ; 14.0V - minimum safe battery voltage
 I2CWCmd:  DW &H1190    ; write one i2c byte, read one byte, addr 0x90
 I2CRCmd:  DW &H0190    ; write nothing, read one byte, addr 0x90
+
+MoveDistance:    DW 0
+MoveHeading:	 DW 0
 
 DataArray:
 	DW 0
