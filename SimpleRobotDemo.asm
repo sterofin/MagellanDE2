@@ -74,29 +74,14 @@ Main:
 	; If you want to take manual control of the robot,
 	; execute CLI &B0010 to disable the timer interrupt.
 
+	;MAIN PROGRAM STARTS HERE
+	LOAD	Zero
+	ADDI	90
+	STORE	MoveHeading
+	CALL	Turn
 	LOADI	293
 	STORE	MoveDistance
 	CALL	MoveForDistance
-	
-; 	LOAD   Mask5
-; 	OUT    SONAREN
-; 	
-; TurnLoop:	
-; 	IN 	   DIST5
-; 	SUB    Ft4
-; 	JNEG   LoopOut
-; 	LOAD   FMid
-; 	OUT    LVELCMD
-; 	LOAD   RMid
-; 	OUT    RVELCMD
-; 	JUMP   TurnLoop
-; 
-; LoopOut: 
-;     CLI    &B1111      ; disable all interrupts
-; 	LOAD   Zero        ; Stop everything.
-; 	OUT    LVELCMD
-; 	OUT    RVELCMD
-; 	OUT    SONAREN
 	
 InfLoop:
 	JUMP   InfLoop
@@ -104,8 +89,6 @@ InfLoop:
 	; infinite loop, because it uses the timer interrupt, so the
 	; robot will continue to attempt to match DTheta and DVel
 	
-	
-
 Die:
 ; Sometimes it's useful to permanently stop execution.
 ; This will also catch the execution if it accidentally
@@ -130,7 +113,19 @@ CTimer_ISR:
 	
 ;Rotates the robot. Place relative angle in MoveHeading, then call.
 Turn:
-	
+	IN    Theta
+	ADD   MoveHeading
+	CALL  Mod360
+	STORE DTheta
+TurnAgain:
+	CALL  ControlMovement
+	IN	  Theta
+	SUB	  DTheta
+	JZERO TermTurn
+	JUMP  TurnAgain
+TermTurn:
+	RETURN
+	;MAY NEED TIMEOUT
 
 ;Move a certain amount of distance specified by a number stored in MoveDistance.
 MoveForDistance:
