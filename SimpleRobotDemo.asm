@@ -118,6 +118,8 @@ Main:
 
 XDES:	DW	0
 YDES:	DW	0
+XP:		DW	0
+YP:		DW	0
 ;Vf:		DW	0
 ;w:		DW	0
 GoToPoint:
@@ -125,13 +127,17 @@ GoToPoint:
 	; 	L2X = Xdesired - XPOS
 	; 	L2Y = Ydesired - YPOS
 	; w = Atan2(AtanX, AtanY) -> AC
+	IN		XPOS
+	STORE	XP
+	IN		YPOS
+	STORE	YP
 	
 	; At this point, XDES,YDES have been stored
 	LOAD	XDES
-	SUB		XPOS
+	SUB		XP
 	STORE	L2X
 	LOAD	YDES
-	SUB		YPOS
+	SUB		YP
 	STORE	L2Y
 	CALL	L2Estimate
 	SUB		10 ; Error margin
@@ -141,10 +147,10 @@ GoToPoint:
 	
 	
 	LOAD	XDES
-	SUB		XPOS
+	SUB		XP
 	STORE	AtanX
 	LOAD	YDES
-	SUB		YPOS
+	SUB		YP
 	STORE	AtanY
 	CALL	Atan2
 	STORE	Dvel
