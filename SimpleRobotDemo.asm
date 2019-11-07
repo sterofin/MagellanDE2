@@ -120,33 +120,42 @@ ScanForObstaclesLoop:
 	LOADI  1
 	STORE  MoveHeading
 	CALL   Turn
+	
 	IN     DIST2
 	SUB    Sensor2Dist
 	ADD    Threshold
 	OUT    SSEG1
 	JNEG   FoundObstacle2
+	IN     DIST2
+	STORE  Sensor2Dist
+	
 	IN     DIST3
 	SUB    Sensor3Dist
 	ADD    Threshold
 	OUT    SSEG2
 	JNEG   FoundObstacle3
+	IN     DIST3
+	STORE  Sensor3Dist
+	
 	JUMP   ScanForObstaclesLoop
 FoundObstacle2:
-	STORE  Sensor2Dist
+	;IN     DIST2
+	;STORE  Sensor2Dist
 	LOADI  -12
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Sensor2Dist
+	IN     DIST2
 	SUB    Ft1_5
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	RETURN
 FoundObstacle3:
-	STORE  Sensor3Dist
+	;IN     DIST3
+	;STORE  Sensor3Dist
 	LOADI  12
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Sensor3Dist
+	IN     DIST3
 	SUB    Ft1_5
 	STORE  MoveDistance
 	CALL   MoveForDistance
