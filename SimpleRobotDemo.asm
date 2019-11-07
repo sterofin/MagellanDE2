@@ -111,6 +111,35 @@ CTimer_ISR:
 	CALL   ControlMovement
 	RETI   ; return from ISR
 	
+ScanForObstacle:
+	IN     DIST2
+	STORE  Sensor2Dist
+	IN     DIST3
+	STORE  Sensor3Dist
+ScanForObstaclesLoop:
+	LOAD   Zero
+	ADD    One ;Rotate by 1*
+	STORE  MoveHeading
+	CALL   Turn
+	IN     DIST2
+	SUB    Sensor2Dist
+	ADD    Threshold
+	JNEG   FoundObstacle2
+	IN     DIST3
+	SUB    Sensor3Dist
+	ADD    Threshold
+	JNEG   FoundObstacle3
+	JUMP   ScanForObstaclesLoop
+FoundObstacle2:
+	LOADI  -12
+	STORE  MoveHeading
+	CALL   Turn
+	;go around in square
+FoundObstacle3:
+	LOADI  12
+	STORE  MoveHeading
+	CALL   Turn
+	;go around in square
 ;Rotates the robot. Place relative angle in MoveHeading, then call.
 Turn:
 	IN    Theta
@@ -696,7 +725,10 @@ I2CError:
 ;***************************************************************
 ;* Variables
 ;***************************************************************
-Temp:     DW 0 ; "Temp" is not a great name, but can be useful
+Temp:        DW 0 ; "Temp" is not a great name, but can be useful
+Sensor2Dist: DW 0
+Sensor3Dist: DW 0
+Threshold:   DW 300
 
 ;***************************************************************
 ;* Constants
