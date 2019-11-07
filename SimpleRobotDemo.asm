@@ -82,6 +82,7 @@ Main:
 ; 	LOADI	293
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
+	CALL	ScanForObstacle
 	CALL	MakeSquare
 	JUMP	InfLoop
 	
@@ -120,30 +121,30 @@ MakeSquare:
 	CALL   Turn        ; initial Left Turn to set up Diamond
 	
 	; Do 4 times
-	LOADI  Ft3
+	LOADI  Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  Ft3
+	LOADI  Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  Ft3
+	LOADI  Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  Ft3
+	LOADI  Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
-	LOADI  -90
-	STORE  MoveHeading
-	CALL   Turn
+; 	LOADI  -90
+; 	STORE  MoveHeading
+; 	CALL   Turn
 	RETURN
 	
 ScanForObstacle:
@@ -811,8 +812,8 @@ LowNibl:  DW &HF       ; 0000 0000 0000 1111
 ; some useful movement values
 OneMeter: DW 961       ; ~1m in 1.04mm units
 HalfMeter: DW 481      ; ~0.5m in 1.04mm units
-Ft1       DW 293
-Ft1_5     DW 440
+Ft1:       DW 293
+Ft1_5:     DW 440
 Ft2:      DW 586       ; ~2ft in 1.04mm units
 Ft3:      DW 879
 Ft4:      DW 1172
