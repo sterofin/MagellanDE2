@@ -75,13 +75,15 @@ Main:
 	; execute CLI &B0010 to disable the timer interrupt.
 
 	;MAIN PROGRAM STARTS HERE
-	LOAD	Zero
-	ADDI	90
-	STORE	MoveHeading
-	CALL	Turn
-	LOADI	293
-	STORE	MoveDistance
-	CALL	MoveForDistance
+; 	LOAD	Zero
+; 	ADDI	90
+; 	STORE	MoveHeading
+; 	CALL	Turn
+; 	LOADI	293
+; 	STORE	MoveDistance
+; 	CALL	MoveForDistance
+	CALL	MakeSquare
+	JUMP	InfLoop
 	
 InfLoop:
 	JUMP   InfLoop
@@ -110,6 +112,39 @@ Forever:
 CTimer_ISR:
 	CALL   ControlMovement
 	RETI   ; return from ISR
+	
+	
+MakeSquare:
+	LOADI  45
+	STORE  MoveHeading
+	CALL   Turn        ; initial Left Turn to set up Diamond
+	
+	; Do 4 times
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  MoveHeading
+	CALL   Turn
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  MoveHeading
+	CALL   Turn
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  MoveHeading
+	CALL   Turn
+	LOADI  Ft3
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	LOADI  -90
+	STORE  MoveHeading
+	CALL   Turn
+	RETURN
 	
 ScanForObstacle:
 	IN     DIST2
