@@ -77,42 +77,84 @@ Main:
 	LOAD   Mask5
 	OUT    SONAREN
 	
-MakeSquare:
-	LOADI  45
-	STORE  Heading
-	CALL   Turn        ; initial Left Turn to set up Diamond
+	LOADI  500
+	STORE  XDES
+	STORE  YDES
+	JUMP   GoToPoint
+	JUMP   Die
 	
-	; Do 4 times
-	LOADI  Ft3
-	STORE  MoveDistance
-	CALL   MoveForDistance
-	LOADI  -90
-	STORE  Heading
-	CALL   Turn
-	LOADI  Ft3
-	STORE  MoveDistance
-	CALL   MoveForDistance
-	LOADI  -90
-	STORE  Heading
-	CALL   Turn
-	LOADI  Ft3
-	STORE  MoveDistance
-	CALL   MoveForDistance
-	LOADI  -90
-	STORE  Heading
-	CALL   Turn
-	LOADI  Ft3
-	STORE  MoveDistance
-	CALL   MoveForDistance
-	LOADI  -90
-	STORE  Heading
-	CALL   Turn
+; MakeSquare:
+; 	LOADI  45
+; 	STORE  Heading
+; 	CALL   Turn        ; initial Left Turn to set up Diamond
+; 	
+; 	; Do 4 times
+; 	LOADI  Ft3
+; 	STORE  MoveDistance
+; 	CALL   MoveForDistance
+; 	LOADI  -90
+; 	STORE  Heading
+; 	CALL   Turn
+; 	LOADI  Ft3
+; 	STORE  MoveDistance
+; 	CALL   MoveForDistance
+; 	LOADI  -90
+; 	STORE  Heading
+; 	CALL   Turn
+; 	LOADI  Ft3
+; 	STORE  MoveDistance
+; 	CALL   MoveForDistance
+; 	LOADI  -90
+; 	STORE  Heading
+; 	CALL   Turn
+; 	LOADI  Ft3
+; 	STORE  MoveDistance
+; 	CALL   MoveForDistance
+; 	LOADI  -90
+; 	STORE  Heading
+; 	CALL   Turn
 	
+	RETURN
+
+XDES:	DW	0
+YDES:	DW	0
+;Vf:		DW	0
+;w:		DW	0
+GoToPoint:
+	; V = L2Estimate(L2X,L2Y) -> AC
+	; 	L2X = Xdesired - XPOS
+	; 	L2Y = Ydesired - YPOS
+	; w = Atan2(AtanX, AtanY) -> AC
+	
+	; At this point, XDES,YDES have been stored
+	LOAD	XDES
+	SUB		XPOS
+	STORE	L2X
+	LOAD	YDES
+	SUB		YPOS
+	STORE	L2Y
+	CALL	L2Estimate
+	SUB		10 ; Error margin
+	JNEG	GTPDone
+	JZERO	GTPDone
+	STORE	DTheta
+	
+	
+	LOAD	XDES
+	SUB		XPOS
+	STORE	AtanX
+	LOAD	YDES
+	SUB		YPOS
+	STORE	AtanY
+	CALL	Atan2
+	STORE	Dvel
+	CALL	ControlMovement
+	JUMP GoToPoint
+	
+GTPDone:
 	RETURN
 	
 	
-	
-
 LoopOut: 
     CLI    &B1111      ; disable all interrupts
 	LOAD   Zero        ; Stop everything.
