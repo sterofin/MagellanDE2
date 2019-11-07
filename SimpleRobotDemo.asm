@@ -122,17 +122,19 @@ ScanForObstaclesLoop:
 	CALL   Turn
 	
 	IN     DIST2
+	OUT SSEG1
 	SUB    Sensor2Dist
 	ADD    Threshold
-	OUT    SSEG1
+	;OUT    SSEG1
 	JNEG   FoundObstacle2
 	IN     DIST2
 	STORE  Sensor2Dist
 	
 	IN     DIST3
+	OUT SSEG2
 	SUB    Sensor3Dist
 	ADD    Threshold
-	OUT    SSEG2
+	;OUT    SSEG2
 	JNEG   FoundObstacle3
 	IN     DIST3
 	STORE  Sensor3Dist
@@ -749,7 +751,7 @@ I2CError:
 Temp:        DW 0 ; "Temp" is not a great name, but can be useful
 Sensor2Dist: DW 0
 Sensor3Dist: DW 0
-Threshold:   DW 300
+Threshold:   DW 450
 
 ;***************************************************************
 ;* Constants
