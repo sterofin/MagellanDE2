@@ -148,35 +148,52 @@ MakeSquare:
 	RETURN
 	
 ScanForObstacle:
-	IN     DIST2
-	STORE  Sensor2Dist
-	IN     DIST3
-	STORE  Sensor3Dist
+	LOAD   Mask2
+	;OR     Mask3
+	OUT    SONAREN
+	;IN     DIST2
+	;STORE  Sensor2Dist
+	;IN     DIST3
+	;STORE  Sensor3Dist
 ScanForObstaclesLoop:
 	LOADI  1
 	STORE  MoveHeading
 	CALL   Turn
+	IN	   DIST2
+	OUT	   SSEG1
+	;IN     DIST3
+	;OUT    SSEG2
 	
+ScanSensor2:
+	LOAD   Sensor2Dist
+	OUT    SSEG2
 	IN     DIST2
-	OUT SSEG1
+	SUB    ErrorNum
+	JPOS   ScanForObstaclesLoop
+	IN     DIST2
 	SUB    Sensor2Dist
+	;OUT    LCD
 	ADD    Threshold
 	;OUT    SSEG1
 	JNEG   FoundObstacle2
 	IN     DIST2
 	STORE  Sensor2Dist
 	
-	IN     DIST3
-	OUT SSEG2
-	SUB    Sensor3Dist
-	ADD    Threshold
-	;OUT    SSEG2
-	JNEG   FoundObstacle3
-	IN     DIST3
-	STORE  Sensor3Dist
+; ScanSensor3:
+	; IN     DIST3
+	; SUB    ErrorNum
+	; JPOS   ScanForObstaclesLoop
+	; IN     DIST3
+	; SUB    Sensor3Dist
+	; ADD    Threshold
+	; ;OUT    SSEG2
+	; JNEG   FoundObstacle3
+	; IN     DIST3
+	; STORE  Sensor3Dist
 	
 	JUMP   ScanForObstaclesLoop
 FoundObstacle2:
+	OUT LCD
 	;IN     DIST2
 	;STORE  Sensor2Dist
 	LOADI  -12
@@ -187,17 +204,19 @@ FoundObstacle2:
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	RETURN
-FoundObstacle3:
-	;IN     DIST3
-	;STORE  Sensor3Dist
-	LOADI  12
-	STORE  MoveHeading
-	CALL   Turn
-	IN     DIST3
-	SUB    Ft1_5
-	STORE  MoveDistance
-	CALL   MoveForDistance
-	RETURN
+; FoundObstacle3:
+	; OUT LCD
+	; JUMP InfLoop
+	; ;IN     DIST3
+	; ;STORE  Sensor3Dist
+	; LOADI  12
+	; STORE  MoveHeading
+	; CALL   Turn
+	; IN     DIST3
+	; SUB    Ft1_5
+	; STORE  MoveDistance
+	; CALL   MoveForDistance
+	; RETURN
 	;go around in square
 ;Rotates the robot. Place relative angle in MoveHeading, then call.
 Turn:
@@ -788,10 +807,11 @@ Temp:        DW 0 ; "Temp" is not a great name, but can be useful
 Sensor2Dist: DW 0
 Sensor3Dist: DW 0
 Threshold:   DW 450
+ErrorNum:    DW &H7F00
 
 ;***************************************************************
 ;* Constants
-;* (though there is nothing stopping you from writing to these)
+;* (though there is nothing stoppfing you from writing to these)
 ;***************************************************************
 NegOne:   DW -1
 Zero:     DW 0
