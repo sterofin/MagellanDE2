@@ -117,28 +117,40 @@ ScanForObstacle:
 	IN     DIST3
 	STORE  Sensor3Dist
 ScanForObstaclesLoop:
-	LOAD   Zero
-	ADD    One ;Rotate by 1*
+	LOADI  1
 	STORE  MoveHeading
 	CALL   Turn
 	IN     DIST2
 	SUB    Sensor2Dist
 	ADD    Threshold
+	OUT    SSEG1
 	JNEG   FoundObstacle2
 	IN     DIST3
 	SUB    Sensor3Dist
 	ADD    Threshold
+	OUT    SSEG2
 	JNEG   FoundObstacle3
 	JUMP   ScanForObstaclesLoop
 FoundObstacle2:
+	STORE  Sensor2Dist
 	LOADI  -12
 	STORE  MoveHeading
 	CALL   Turn
-	;go around in square
+	LOAD   Sensor2Dist
+	SUB    Ft1_5
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	RETURN
 FoundObstacle3:
+	STORE  Sensor3Dist
 	LOADI  12
 	STORE  MoveHeading
 	CALL   Turn
+	LOAD   Sensor3Dist
+	SUB    Ft1_5
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	RETURN
 	;go around in square
 ;Rotates the robot. Place relative angle in MoveHeading, then call.
 Turn:
@@ -764,6 +776,8 @@ LowNibl:  DW &HF       ; 0000 0000 0000 1111
 ; some useful movement values
 OneMeter: DW 961       ; ~1m in 1.04mm units
 HalfMeter: DW 481      ; ~0.5m in 1.04mm units
+Ft1       DW 293
+Ft1_5     DW 440
 Ft2:      DW 586       ; ~2ft in 1.04mm units
 Ft3:      DW 879
 Ft4:      DW 1172
