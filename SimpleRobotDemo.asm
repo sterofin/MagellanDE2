@@ -83,7 +83,7 @@ Main:
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
 	CALL	ScanForObstacle
-	CALL	MakeSquare
+	CALL	MoveForwardScanning
 	JUMP	InfLoop
 	
 InfLoop:
@@ -187,7 +187,7 @@ ScanForObstaclesLoop:
 	;OUT    SSEG2
 	
 	;NEW STUFF, 11/12
-MoveFowardScanning:
+MoveForwardScanning:
 	IN		THETA
 	STORE	DTheta
 	LOAD	FMid
