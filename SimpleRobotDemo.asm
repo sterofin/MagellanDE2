@@ -142,6 +142,9 @@ MakeSquare:
 	LOADI  Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
+	LOADI  45
+	STORE  MoveHeading
+	CALL   Turn
 ; 	LOADI  -90
 ; 	STORE  MoveHeading
 ; 	CALL   Turn
@@ -163,6 +166,55 @@ ScanForObstaclesLoop:
 	OUT	   SSEG1
 	;IN     DIST3
 	;OUT    SSEG2
+	
+	;NEW STUFF, 11/12
+MoveFowardScanning:
+	IN		THETA
+	STORE	DTheta
+	LOAD	FMid
+	STORE	DVel
+FDistloop:
+	CALL	ControlMovement
+	IN		DIST2
+	SUB		Ft1
+	JNEG	Kill
+	IN		DIST3
+	SUB 	Ft2
+	JNEG    Kill
+	;Not in front of a wall
+	IN		Dist5
+	SUB		Ft9
+	JNEG	MoveToNewObstacle
+	JUMP	FDistloop
+	
+MoveToNewObstacle:
+	IN		Dist5
+	SUB		FT1_5
+	STORE	ObstDistance
+	LOAD	Zero
+	STORE	DVel
+	CALL	ControlMovement
+	LOAD	Zero
+	ADDI	-90
+	STORE	MoveHeading
+	CALL	Turn
+	LOAD	ObstDistance
+	STORE   MoveDistance
+	CALL	MoveForDistance
+	CALL	MakeSquare
+	LOAD	ObstDistance
+	STORE   MoveDistance
+	CALL    MoveForDistance
+	LOADI   90
+	STORE   MoveHeading
+	CALL	Turn
+	JUMP    MoveForwardScanning
+	
+Kill:
+	LOAD	Zero
+	STORE	DVel
+	CALL	ControlMovement
+	JUMP    InfLoop
 	
 ScanSensor2:
 	LOAD   Sensor2Dist
@@ -848,6 +900,7 @@ Ft1_5:     DW 440
 Ft2:      DW 586       ; ~2ft in 1.04mm units
 Ft3:      DW 879
 Ft4:      DW 1172
+Ft8:	  DW 2637
 Deg90:    DW 90        ; 90 degrees in odometer units
 Deg180:   DW 180       ; 180
 Deg270:   DW 270       ; 270
@@ -865,6 +918,7 @@ I2CRCmd:  DW &H0190    ; write nothing, read one byte, addr 0x90
 
 MoveDistance:    DW 0
 MoveHeading:	 DW 0
+ObstDistance:	 DW 0
 
 DataArray:
 	DW 0
