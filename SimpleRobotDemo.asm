@@ -920,7 +920,7 @@ Ft2:       DW 586       ; ~2ft in 1.04mm units
 Ft2_5:     DW 733
 Ft3:       DW 879
 Ft4:       DW 1172
-Ft8:       DW 2637
+Ft9:       DW 2637
 Deg90:     DW 90        ; 90 degrees in odometer units
 Deg180:    DW 180       ; 180
 Deg270:    DW 270       ; 270
