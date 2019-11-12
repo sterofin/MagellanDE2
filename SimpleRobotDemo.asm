@@ -82,7 +82,7 @@ Main:
 ; 	LOADI	293
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
-	CALL	ScanForObstacle
+	CALL	MoveToStart
 	CALL	MoveForwardScanning
 	JUMP	InfLoop
 	
@@ -151,24 +151,32 @@ MakeSquare:
 	RETURN
 
 MoveToStart:
+	LOADI 69
+	OUT   LCD
+
 	LOAD   Mask2
 	OR     Mask3
 	OR     Mask5
 	OUT    SONAREN ;Enable the necessary sonars
 	
 	LOADI  90     ;Go Upwards 4 ft
+	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft4
+	LOAD   Ft3
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	
 	LOADI  -45
+	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft2_5
+	LOAD   Ft3_5
 	STORE  MoveDistance
+	CALL   MoveForDistance
 	
 	LOADI  -45
+	STORE  MoveHeading
 	CALL   Turn
+	RETURN
 	
 
 ScanForObstacle:
@@ -194,6 +202,8 @@ MoveForwardScanning:
 	STORE	DVel
 FDistloop:
 	CALL	ControlMovement
+	LOADI   1
+	OUT     LCD
 	IN		DIST2
 	SUB		Ft1
 	JNEG	Kill
@@ -202,11 +212,18 @@ FDistloop:
 	JNEG    Kill
 	;Not in front of a wall
 	IN		Dist5
+	OUT		SSEG1
 	SUB		Ft9
+	OUT	    SSEG2
 	JNEG	MoveToNewObstacle
 	JUMP	FDistloop
 	
 MoveToNewObstacle:
+	LOADI   2
+	OUT     LCD
+	LOADI	73
+	STORE   MoveDistance
+	CALL    MoveForDistance
 	IN		Dist5
 	SUB		FT1_5
 	STORE	ObstDistance
@@ -919,6 +936,7 @@ Ft1_5:     DW 440
 Ft2:       DW 586       ; ~2ft in 1.04mm units
 Ft2_5:     DW 733
 Ft3:       DW 879
+Ft3_5:     DW 1026
 Ft4:       DW 1172
 Ft9:       DW 2637
 Deg90:     DW 90        ; 90 degrees in odometer units
