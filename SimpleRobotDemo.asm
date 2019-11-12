@@ -146,11 +146,30 @@ MakeSquare:
 ; 	STORE  MoveHeading
 ; 	CALL   Turn
 	RETURN
-	
-ScanForObstacle:
+
+MoveToStart:
 	LOAD   Mask2
-	;OR     Mask3
-	OUT    SONAREN
+	OR     Mask3
+	OR     Mask5
+	OUT    SONAREN ;Enable the necessary sonars
+	
+	LOADI  90     ;Go Upwards 4 ft
+	CALL   Turn
+	LOAD   Ft4
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	
+	LOADI  -45
+	CALL   Turn
+	LOAD   Ft2_5
+	STORE  MoveDistance
+	
+	LOADI  -45
+	CALL   Turn
+	
+
+ScanForObstacle:
+	
 	;IN     DIST2
 	;STORE  Sensor2Dist
 	;IN     DIST3
@@ -841,23 +860,24 @@ LowByte:  DW &HFF      ; binary 00000000 1111111
 LowNibl:  DW &HF       ; 0000 0000 0000 1111
 
 ; some useful movement values
-OneMeter: DW 961       ; ~1m in 1.04mm units
+OneMeter:  DW 961       ; ~1m in 1.04mm units
 HalfMeter: DW 481      ; ~0.5m in 1.04mm units
 Ft1:       DW 293
 Ft1_5:     DW 440
-Ft2:      DW 586       ; ~2ft in 1.04mm units
-Ft3:      DW 879
-Ft4:      DW 1172
-Deg90:    DW 90        ; 90 degrees in odometer units
-Deg180:   DW 180       ; 180
-Deg270:   DW 270       ; 270
-Deg360:   DW 360       ; can never actually happen; for math only
-FSlow:    DW 100       ; 100 is about the lowest velocity value that will move
-RSlow:    DW -100
-FMid:     DW 350       ; 350 is a medium speed
-RMid:     DW -350
-FFast:    DW 500       ; 500 is almost max speed (511 is max)
-RFast:    DW -500
+Ft2:       DW 586       ; ~2ft in 1.04mm units
+Ft2_5:     DW 733
+Ft3:       DW 879
+Ft4:       DW 1172
+Deg90:     DW 90        ; 90 degrees in odometer units
+Deg180:    DW 180       ; 180
+Deg270:    DW 270       ; 270
+Deg360:    DW 360       ; can never actually happen; for math only
+FSlow:     DW 100       ; 100 is about the lowest velocity value that will move
+RSlow:     DW -100
+FMid:      DW 350       ; 350 is a medium speed
+RMid:      DW -350
+FFast:     DW 500       ; 500 is almost max speed (511 is max)
+RFast:     DW -500
 
 MinBatt:  DW 140       ; 14.0V - minimum safe battery voltage
 I2CWCmd:  DW &H1190    ; write one i2c byte, read one byte, addr 0x90
