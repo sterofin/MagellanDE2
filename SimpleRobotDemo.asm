@@ -221,15 +221,15 @@ FDistloop:
 MoveToNewObstacle:
 	LOADI   2
 	OUT     LCD
-	LOADI	73
+	LOAD	Zero
+	STORE	DVel
+	CALL	ControlMovement
+	LOADI	142
 	STORE   MoveDistance
 	CALL    MoveForDistance
 	IN		Dist5
 	SUB		FT1_5
 	STORE	ObstDistance
-	LOAD	Zero
-	STORE	DVel
-	CALL	ControlMovement
 	LOAD	Zero
 	ADDI	-90
 	STORE	MoveHeading
@@ -241,7 +241,7 @@ MoveToNewObstacle:
 	LOAD	ObstDistance
 	STORE   MoveDistance
 	CALL    MoveForDistance
-	LOADI   90
+	LOADI   -90
 	STORE   MoveHeading
 	CALL	Turn
 	JUMP    MoveForwardScanning
