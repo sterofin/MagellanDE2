@@ -114,32 +114,46 @@ CTimer_ISR:
 	CALL   ControlMovement
 	RETI   ; return from ISR
 	
+MakeCircle:
+	LOADI  20
+	STORE  MoveHeading
+	CALL   Turn
+
+	LOADI  9
+	STORE  Temp
+	
+	LOAD   Ft2
+	STORE  MoveDistance
+	CALL   MoveForDistance
+	
+	
 	
 MakeSquare:
 	LOADI  45
 	STORE  MoveHeading
-	CALL   Turn        ; initial Left Turn to set up Diamond
-	
+	CALL   Turn ; initial Left Turn to set up Diamond
+
+	;; Changed LOADI Ft4 to LOAD Ft4, if this messes it up change that back
 	; Do 4 times
-	LOADI  Ft4
+	LOAD   Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  Ft4
+	LOAD   Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  Ft4
+	LOAD   Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  Ft4
+	LOAD   Ft4
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  45
@@ -179,42 +193,43 @@ MoveToStart:
 	RETURN
 	
 
-ScanForObstacle:
+;; ScanForObstacle:		
 	
-	;IN     DIST2
-	;STORE  Sensor2Dist
-	;IN     DIST3
-	;STORE  Sensor3Dist
-ScanForObstaclesLoop:
-	LOADI  1
-	STORE  MoveHeading
-	CALL   Turn
-	IN	   DIST2
-	OUT	   SSEG1
-	;IN     DIST3
-	;OUT    SSEG2
+;; 	;IN     DIST2
+;; 	;STORE  Sensor2Dist
+;; 	;IN     DIST3
+;; 	;STORE  Sensor3Dist
+;; ScanForObstaclesLoop:
+;; 	LOADI  1
+;; 	STORE  MoveHeading
+;; 	CALL   Turn
+;; 	IN	   DIST2
+;; 	OUT	   SSEG1
+;; 	;IN     DIST3
+;; 	;OUT    SSEG2
 	
-	;NEW STUFF, 11/12
+;; 	;NEW STUFF, 11/12
 MoveForwardScanning:
-	IN		THETA
-	STORE	DTheta
-	LOAD	FMid
-	STORE	DVel
+	IN      THETA
+	STORE   DTheta
+	LOAD    FMid
+	STORE   DVel
 FDistloop:
-	CALL	ControlMovement
+	CALL    ControlMovement
 	LOADI   1
 	OUT     LCD
-	IN		DIST2
-	SUB		Ft1
+	IN	DIST2
+	SUB	Ft1
 	JNEG	Kill
-	IN		DIST3
+	IN	DIST3
 	SUB 	Ft2
 	JNEG    Kill
 	;Not in front of a wall
-	IN		Dist5
-	OUT		SSEG1
-	SUB		Ft9
-	OUT	    SSEG2
+	IN	Dist5
+	OUT	SSEG1
+	JNEG    FDistloop
+	SUB	Ft9
+	OUT	SSEG2
 	JNEG	MoveToNewObstacle
 	JUMP	FDistloop
 	
@@ -227,8 +242,8 @@ MoveToNewObstacle:
 	LOADI	142
 	STORE   MoveDistance
 	CALL    MoveForDistance
-	IN		Dist5
-	SUB		FT1_5
+	IN	Dist5
+	SUB	Ft1_5
 	STORE	ObstDistance
 	LOAD	Zero
 	ADDI	-90
@@ -244,6 +259,9 @@ MoveToNewObstacle:
 	LOADI   -90
 	STORE   MoveHeading
 	CALL	Turn
+	LOAD	Ft1
+	STORE   MoveDistance
+	CALL    MoveForDistance
 	JUMP    MoveForwardScanning
 	
 Kill:
@@ -580,7 +598,7 @@ A2_mult: ; multiply, and return bits 23..8 of result
 	AND    LowByte
 	OR     mres16sH     ; combine high and low words of result
 	RETURN
-A2_div: ; 16-bit division scaled by 256, minimizing error
+A2_div: ; 16-bit division led by 256, minimizing error
 	LOADI  9            ; loop 8 times (256 = 2^8)
 	STORE  AtanT
 A2_DL:
