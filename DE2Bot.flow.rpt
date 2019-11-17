@@ -1,5 +1,5 @@
 Flow report for DE2Bot
-Sun Nov 17 14:31:18 2019
+Sun Nov 17 14:57:32 2019
 Quartus II 64-Bit Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Full Version
 
 
@@ -38,7 +38,7 @@ applicable agreement for further details.
 +------------------------------------------------------------------------------------+
 ; Flow Summary                                                                       ;
 +------------------------------------+-----------------------------------------------+
-; Flow Status                        ; Successful - Sun Nov 17 14:31:18 2019         ;
+; Flow Status                        ; Successful - Sun Nov 17 14:57:32 2019         ;
 ; Quartus II 64-Bit Version          ; 9.1 Build 350 03/24/2010 SP 2 SJ Full Version ;
 ; Revision Name                      ; DE2Bot                                        ;
 ; Top-level Entity Name              ; DE2bot                                        ;
@@ -103,7 +103,11 @@ applicable agreement for further details.
 ; Classic Timing Analyzer ; 00:00:03     ; 1.0                     ; 4451 MB             ; 00:00:04                           ;
 ; MIF/HEX Update          ; 00:00:01     ; 1.0                     ; 4476 MB             ; 00:00:01                           ;
 ; Assembler               ; 00:00:02     ; 1.0                     ; 4484 MB             ; 00:00:02                           ;
-; Total                   ; 00:01:12     ; --                      ; --                  ; 00:01:19                           ;
+; MIF/HEX Update          ; 00:00:02     ; 1.0                     ; 4476 MB             ; 00:00:01                           ;
+; Assembler               ; 00:00:03     ; 1.0                     ; 4484 MB             ; 00:00:02                           ;
+; MIF/HEX Update          ; 00:00:01     ; 1.0                     ; 4476 MB             ; 00:00:01                           ;
+; Assembler               ; 00:00:02     ; 1.0                     ; 4484 MB             ; 00:00:02                           ;
+; Total                   ; 00:01:20     ; --                      ; --                  ; 00:01:25                           ;
 +-------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
@@ -118,6 +122,10 @@ applicable agreement for further details.
 ; Classic Timing Analyzer ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
 ; MIF/HEX Update          ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
 ; Assembler               ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
+; MIF/HEX Update          ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
+; Assembler               ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
+; MIF/HEX Update          ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
+; Assembler               ; 2031LAB013       ; Windows Vista ; 6.2        ; x86_64         ;
 +-------------------------+------------------+---------------+------------+----------------+
 
 
@@ -128,6 +136,10 @@ quartus_map --read_settings_files=on --write_settings_files=off DE2Bot -c DE2Bot
 quartus_fit --read_settings_files=off --write_settings_files=off DE2Bot -c DE2Bot
 quartus_asm --read_settings_files=off --write_settings_files=off DE2Bot -c DE2Bot
 quartus_tan --read_settings_files=off --write_settings_files=off DE2Bot -c DE2Bot --timing_analysis_only
+quartus_cdb DE2Bot -c DE2Bot --update_mif
+quartus_asm --read_settings_files=on --write_settings_files=off DE2Bot -c DE2Bot
+quartus_cdb DE2Bot -c DE2Bot --update_mif
+quartus_asm --read_settings_files=on --write_settings_files=off DE2Bot -c DE2Bot
 quartus_cdb DE2Bot -c DE2Bot --update_mif
 quartus_asm --read_settings_files=on --write_settings_files=off DE2Bot -c DE2Bot
 

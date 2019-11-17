@@ -75,25 +75,25 @@ CONTENT
            03E : B82D;  -- 	LOADI  45
            03F : 1286;  -- 	STORE  MoveHeading
            040 : 80B8;  -- 	CALL   Turn ; initial Left Turn to set up Diamond
-           041 : 0A73;  -- 	LOAD   Ft3
+           041 : BA73;  -- 	LOADI   Ft3
            042 : 1285;  -- 	STORE  MoveDistance
            043 : 80C2;  -- 	CALL   MoveForDistance
            044 : BFA6;  -- 	LOADI  -90
            045 : 1286;  -- 	STORE  MoveHeading
            046 : 80B8;  -- 	CALL   Turn
-           047 : 0A73;  -- 	LOAD   Ft3
+           047 : BA73;  -- 	LOADI   Ft3
            048 : 1285;  -- 	STORE  MoveDistance
            049 : 80C2;  -- 	CALL   MoveForDistance
            04A : BFA6;  -- 	LOADI  -90
            04B : 1286;  -- 	STORE  MoveHeading
            04C : 80B8;  -- 	CALL   Turn
-           04D : 0A73;  -- 	LOAD   Ft3
+           04D : BA73;  -- 	LOADI   Ft3
            04E : 1285;  -- 	STORE  MoveDistance
            04F : 80C2;  -- 	CALL   MoveForDistance
            050 : BFA6;  -- 	LOADI  -90
            051 : 1286;  -- 	STORE  MoveHeading
            052 : 80B8;  -- 	CALL   Turn
-           053 : 0A73;  -- 	LOAD   Ft3
+           053 : BA73;  -- 	LOADI   Ft3
            054 : 1285;  -- 	STORE  MoveDistance
            055 : 80C2;  -- 	CALL   MoveForDistance
            056 : B82D;  -- 	LOADI  45
@@ -147,7 +147,7 @@ CONTENT
            086 : 0A58;  -- 	LOAD	Zero
            087 : 10D6;  -- 	STORE	DVel
            088 : 80D7;  -- 	CALL	ControlMovement
-           089 : B88E;  -- 	LOADI	142
+           089 : B864;  -- 	LOADI	100
            08A : 1285;  -- 	STORE   MoveDistance
            08B : 80C2;  -- 	CALL    MoveForDistance
            08C : 90AD;  -- 	IN	Dist5
