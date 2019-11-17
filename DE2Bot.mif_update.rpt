@@ -1,6 +1,6 @@
 MIF/HEX Update report for DE2Bot
-Tue Nov 12 17:06:56 2019
-Quartus II Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Full Version
+Sun Nov 17 14:31:15 2019
+Quartus II 64-Bit Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Full Version
 
 
 ---------------------
@@ -35,7 +35,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; MIF/HEX Update Summary                                        ;
 +-----------------------+---------------------------------------+
-; MIF/HEX Update Status ; Successful - Tue Nov 12 17:06:56 2019 ;
+; MIF/HEX Update Status ; Successful - Sun Nov 17 14:31:15 2019 ;
 ; Revision Name         ; DE2Bot                                ;
 ; Top-level Entity Name ; DE2bot                                ;
 ; Family                ; Cyclone II                            ;
@@ -43,27 +43,27 @@ applicable agreement for further details.
 +-----------------------+---------------------------------------+
 
 
-+-------------------------------------------------------------------------------------------+
-; MIF/HEX Update Processed Files                                                            ;
-+-------------------------------------------------------------------------------------------+
-; File Name                                                                                 ;
-+-------------------------------------------------------------------------------------------+
-; //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/COS_table.mif       ;
-; //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/SIN_table.mif       ;
-; //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/SOUND.mif           ;
-; //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/SimpleRobotDemo.mif ;
-+-------------------------------------------------------------------------------------------+
++---------------------------------------------------+
+; MIF/HEX Update Processed Files                    ;
++---------------------------------------------------+
+; File Name                                         ;
++---------------------------------------------------+
+; C:/Users/rkliman3/MagellanDE2/COS_table.mif       ;
+; C:/Users/rkliman3/MagellanDE2/SIN_table.mif       ;
+; C:/Users/rkliman3/MagellanDE2/SOUND.mif           ;
+; C:/Users/rkliman3/MagellanDE2/SimpleRobotDemo.mif ;
++---------------------------------------------------+
 
 
 +-------------------------+
 ; MIF/HEX Update Messages ;
 +-------------------------+
 Info: *******************************************************************
-Info: Running Quartus II MIF/HEX Update
+Info: Running Quartus II 64-Bit MIF/HEX Update
     Info: Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Full Version
-    Info: Processing started: Tue Nov 12 17:06:55 2019
+    Info: Processing started: Sun Nov 17 14:31:14 2019
 Info: Command: quartus_cdb DE2Bot -c DE2Bot --update_mif
-Warning: 646 out of 2048 addresses are reinitialized. The latest initialized data will replace the existing data. There are 646 warnings found, and 10 warnings are reported.
+Warning: 649 out of 2048 addresses are reinitialized. The latest initialized data will replace the existing data. There are 649 warnings found, and 10 warnings are reported.
     Warning: Memory Initialization File address 0 is reinitialized
     Warning: Memory Initialization File address 1 is reinitialized
     Warning: Memory Initialization File address 2 is reinitialized
@@ -75,13 +75,13 @@ Warning: 646 out of 2048 addresses are reinitialized. The latest initialized dat
     Warning: Memory Initialization File address 8 is reinitialized
     Warning: Memory Initialization File address 9 is reinitialized
 Info: Processed the following Memory Initialization File(s)
-    Info: Processed Memory Initialization File //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/COS_table.mif
-    Info: Processed Memory Initialization File //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/SIN_table.mif
-    Info: Processed Memory Initialization File //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/SOUND.mif
-    Info: Processed Memory Initialization File //prism.nas.gatech.edu/dbulfin3/ECE/Downloads/ECE Project/MagellanDE2/SimpleRobotDemo.mif
-Info: Quartus II MIF/HEX Update was successful. 0 errors, 11 warnings
-    Info: Peak virtual memory: 267 megabytes
-    Info: Processing ended: Tue Nov 12 17:06:56 2019
+    Info: Processed Memory Initialization File C:/Users/rkliman3/MagellanDE2/COS_table.mif
+    Info: Processed Memory Initialization File C:/Users/rkliman3/MagellanDE2/SIN_table.mif
+    Info: Processed Memory Initialization File C:/Users/rkliman3/MagellanDE2/SOUND.mif
+    Info: Processed Memory Initialization File C:/Users/rkliman3/MagellanDE2/SimpleRobotDemo.mif
+Info: Quartus II 64-Bit MIF/HEX Update was successful. 0 errors, 11 warnings
+    Info: Peak virtual memory: 4476 megabytes
+    Info: Processing ended: Sun Nov 17 14:31:15 2019
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

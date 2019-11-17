@@ -133,27 +133,27 @@ MakeSquare:
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
 
-	;; Changed LOADI Ft4 to LOAD Ft4, if this messes it up change that back
+	;; Changed LOADI Ft4 to LOAD Ft3, if this messes it up change that back
 	; Do 4 times
-	LOAD   Ft4
+	LOADI   Ft3
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft4
+	LOADI   Ft3
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft4
+	LOADI   Ft3
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft4
+	LOADI   Ft3
 	STORE  MoveDistance
 	CALL   MoveForDistance
 	LOADI  45
@@ -228,7 +228,7 @@ FDistloop:
 	IN	Dist5
 	OUT	SSEG1
 	JNEG    FDistloop
-	SUB	Ft9
+	SUB	Ft8
 	OUT	SSEG2
 	JNEG	MoveToNewObstacle
 	JUMP	FDistloop
@@ -239,7 +239,7 @@ MoveToNewObstacle:
 	LOAD	Zero
 	STORE	DVel
 	CALL	ControlMovement
-	LOADI	142
+	LOADI	100
 	STORE   MoveDistance
 	CALL    MoveForDistance
 	IN	Dist5
@@ -275,7 +275,7 @@ ScanSensor2:
 	OUT    SSEG2
 	IN     DIST2
 	SUB    ErrorNum
-	JPOS   ScanForObstaclesLoop
+	;JPOS   ScanForObstaclesLoop
 	IN     DIST2
 	SUB    Sensor2Dist
 	;OUT    LCD
@@ -297,7 +297,7 @@ ScanSensor2:
 	; IN     DIST3
 	; STORE  Sensor3Dist
 	
-	JUMP   ScanForObstaclesLoop
+	;JUMP   ScanForObstaclesLoop
 FoundObstacle2:
 	OUT LCD
 	;IN     DIST2
@@ -956,6 +956,7 @@ Ft2_5:     DW 733
 Ft3:       DW 879
 Ft3_5:     DW 1026
 Ft4:       DW 1172
+Ft8:       DW 2344
 Ft9:       DW 2637
 Deg90:     DW 90        ; 90 degrees in odometer units
 Deg180:    DW 180       ; 180
