@@ -129,9 +129,13 @@ MakeCircle:
 	
 	
 MakeSquare:
-	LOADI  45
+	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
+	
+	LOADI -440 ; move back 1.5 ft
+	STORE MoveDistance
+	CALL  MoveForDistance
 
 	;; Changed LOADI Ft4 to LOAD Ft3, if this messes it up change that back
 	; Do 4 times
