@@ -94,10 +94,15 @@ Main:
 	AND	DieMask
 	OUT	ToDie
 	OUT	SSEG1
+	JZERO	DoNothingCode
+	LOAD	One
+	STORE	ObstaclesToTry
+DoNothingCode:	
 	LOAD	Temp
 	AND	OnlyClose
 	SHIFT	-1
 	OUT	SSEG2
+	SUB	One
 	JNEG    FarCode
 	LOAD	AltScanDist
 	STORE	ScanDist
@@ -105,6 +110,7 @@ FarCode:
 	LOAD	Temp
 	AND	NmSqrMask
 	SHIFT	-2
+	ADDI	1
 	STORE	NumRotations
 	OUT 	LCD
 	LOAD	Temp
@@ -165,7 +171,7 @@ MakeSquare:
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
-	
+ContSquare:	
 	LOADI &H144
 	STORE MoveDistance
 	CALL  MoveX
@@ -196,10 +202,6 @@ MakeSquare:
 	LOADI  &H144
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  90
-	ADD    Offset
-	STORE  MoveHeading
-	CALL   Turn
 	RETURN
 
 MoveToStart:
@@ -359,6 +361,13 @@ MoveToNewObstacle:
 	STORE   MoveDistance
 	CALL	MoveY
 	CALL	MakeSquare
+	LOAD	NumRotations
+	SUB	One
+	JPOS	ContSquare
+	LOADI  90
+	ADD    Offset
+	STORE  MoveHeading
+	CALL   Turn
 	LOAD	ObstDistance
 	STORE   MoveDistance
 	CALL    MoveY
@@ -371,7 +380,11 @@ MoveToNewObstacle:
 	LOAD	Ft1
 	STORE   MoveDistance
 	CALL    MoveForDistance
-	JUMP    MoveForwardScanning
+
+	LOAD	ObstaclesToTry
+	SUB	One
+	JPOS    MoveForwardScanning
+	JUMP	InfLoop
 	
 Kill:
 	LOAD	Zero
@@ -1060,7 +1073,7 @@ Mask7:    DW &B10000000
 DieMask:	DW &B00000001
 OnlyClose:	DW &B00000010
 NmSqrMask:	DW &B00011100
-OffsetMask:	DW &B11100000
+OffsetMask:	DW &B111100000
 
 LowByte:  DW &HFF      ; binary 00000000 1111111
 LowNibl:  DW &HF       ; 0000 0000 0000 1111
@@ -1098,7 +1111,7 @@ ObstDistance:	 DW 0
 
 ToDie:		 DW 0
 ObstaclesToTry:	 DW 3
-NumRotations:	 DW 0
+NumRotations:	 DW 1
 
 DataArray:
 	DW 0
