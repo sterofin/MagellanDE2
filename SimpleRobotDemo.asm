@@ -66,7 +66,7 @@ WaitForUser:
 Main:
 	OUT    RESETPOS    ; reset the odometry to 0,0,0
 	; configure timer interrupt for the movement control code
-	LOADI  10          ; period = (10 ms * 10) = 0.1s, or 10Hz.
+	LOADI  10          ; period = (10 ms * 10) m 0.1s, or 10Hz.
 	OUT    CTIMER      ; turn on timer peripheral
 	SEI    &B0010      ; enable interrupts from source 2 (timer)
 	; at this point, timer interrupts will be firing at 10Hz, and
@@ -83,13 +83,17 @@ Main:
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
 
+	LOAD   Mask2
+	OR     Mask3
+	OR     Mask5
+	OR     Mask0
+	OUT    SONAREN ;Enable the necessary sonars
+
 	CALL	MoveToStart	
 	CALL	MoveForwardScanning
-	;; LOAD   Mask2
-	;; OR     Mask3
-	;; OR     Mask5
-	;; OR     Mask0
-	;; OUT    SONAREN ;Enable the necessary sonars
+	;; LOADI  -45
+	;; STORE	MoveHeading
+	;; CALL 	Turn
 	;; CALL	MakeParallel
 	JUMP	Die
 
@@ -141,7 +145,7 @@ MakeSquare:
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
 	
-	LOADI &H144
+	LOADI &Hd5
 	STORE MoveDistance
 	CALL  MoveX
 
@@ -168,10 +172,10 @@ MakeSquare:
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H144
+	LOADI  &H150
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  110
+	LOADI  111
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
@@ -235,6 +239,7 @@ Looper:
 	STORE	TempDist
 	SUB		OldDist
 	JNEG	Looper
+	JZERO	Looper
 	; This should be the opposite of the number above
 	LOADI	0
 	OUT 	RVELCMD
@@ -327,7 +332,7 @@ MoveToNewObstacle:
 	STORE   MoveDistance
 	CALL    MoveX
 	IN	Dist5
-	SUB	Ft1_5
+	SUB	Ft2
 	STORE	ObstDistance
 	LOAD	Zero
 	ADDI	-90
@@ -338,6 +343,7 @@ MoveToNewObstacle:
 	CALL	MoveY
 	CALL	MakeSquare
 	LOAD	ObstDistance
+	SUB 	Ft1
 	STORE   MoveDistance
 	CALL    MoveY
 	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
@@ -348,13 +354,8 @@ MoveToNewObstacle:
 	;; CALL	MakeParallel
 	LOAD	Ft1
 	STORE   MoveDistance
-	CALL    MoveForDistance
-	LOAD	Tries
-	SUB	One
-	STORE	Tries
-	JPOS    MoveForwardScanning
-	JZERO	MoveForwardScanning
-	JUMP	Die
+	CALL    MoveX
+	JUMP    MoveForwardScanning
 	
 Kill:
 	LOAD	Zero
