@@ -119,9 +119,9 @@ FarCode:
 	STORE	Offset
 
 	;; MAIN CODE
-	CALL	MoveToStart	
-	CALL	MoveForwardScanning
-	;; CALL	MakeParallel
+	;; CALL	MoveToStart	
+	;; CALL	MoveForwardScanning
+	CALL	MakeParallel
 	JUMP	Die
 
 	
@@ -340,7 +340,8 @@ FDistloop:
 	OUT	SSEG2
 	JNEG	MoveToNewObstacle
 	JUMP	FDistloop
-	
+
+TempNum:	DW	0
 MoveToNewObstacle:
 	LOADI   2
 	OUT     LCD
@@ -361,9 +362,18 @@ MoveToNewObstacle:
 	STORE   MoveDistance
 	CALL	MoveY
 	CALL	MakeSquare
-	LOAD	NumRotations
+	LOAD 	NumRotations
 	SUB	One
+	JZero	PassLoop
+	LOAD	NumRotations
+	STORE	TempNum
+ContObstacle:	
+	LOAD	TempNum
+	SUB	One
+	STORE	TempNum
 	JPOS	ContSquare
+	JUMP	InfLoop
+PassLoop:	
 	LOADI  90
 	ADD    Offset
 	STORE  MoveHeading
@@ -379,10 +389,11 @@ MoveToNewObstacle:
 	CALL	MakeParallel
 	LOAD	Ft1
 	STORE   MoveDistance
-	CALL    MoveForDistance
+	CALL    MoveX
 
 	LOAD	ObstaclesToTry
 	SUB	One
+	STORE	ObstaclesToTry
 	JPOS    MoveForwardScanning
 	JUMP	InfLoop
 	
