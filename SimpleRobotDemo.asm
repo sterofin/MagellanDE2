@@ -83,15 +83,14 @@ Main:
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
 
-	;; CALL	MoveToStart	
-	;; CALL	MoveForwardScanning
-	;; CALL    MakeSquare
-	LOAD   Mask2
-	OR     Mask3
-	OR     Mask5
-	OR     Mask0
-	OUT    SONAREN ;Enable the necessary sonars
-	CALL	MakeParallel
+	CALL	MoveToStart	
+	CALL	MoveForwardScanning
+	;; LOAD   Mask2
+	;; OR     Mask3
+	;; OR     Mask5
+	;; OR     Mask0
+	;; OUT    SONAREN ;Enable the necessary sonars
+	;; CALL	MakeParallel
 	JUMP	Die
 
 	
@@ -138,7 +137,7 @@ MakeCircle:
 	
 	
 MakeSquare:
-	LOADI  90
+	LOADI  100
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
 	
@@ -172,7 +171,7 @@ MakeSquare:
 	LOADI  &H144
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  90
+	LOADI  110
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
@@ -235,7 +234,7 @@ MakeParallel:
 	; This should be the opposite of the number above
 	LOADI	0
 	OUT 	RVELCMD
-	OUT	LVELCMDn
+	OUT	LVELCMD
 	RETURN
 	
 MoveX:
@@ -338,15 +337,20 @@ MoveToNewObstacle:
 	STORE   MoveDistance
 	CALL    MoveY
 	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
-	LOADI   -45
+	LOADI   -90
 	STORE   MoveHeading
 	CALL	Turn
 	; This function should complete the turn slowly, but check the sonars to try to make it parallel.
-	CALL	MakeParallel
+	;; CALL	MakeParallel
 	LOAD	Ft1
 	STORE   MoveDistance
 	CALL    MoveForDistance
-	JUMP    MoveForwardScanning
+	LOAD	Tries
+	SUB	One
+	STORE	Tries
+	JPOS    MoveForwardScanning
+	JZERO	MoveForwardScanning
+	JUMP	Die
 	
 Kill:
 	LOAD	Zero
@@ -1063,6 +1067,8 @@ I2CRCmd:  DW &H0190    ; write nothing, read one byte, addr 0x90
 MoveDistance:    DW 0
 MoveHeading:	 DW 0
 ObstDistance:	 DW 0
+
+Tries:		 DW 2
 
 DataArray:
 	DW 0
