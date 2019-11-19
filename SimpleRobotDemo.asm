@@ -82,11 +82,20 @@ Main:
 ; 	LOADI	293
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
-	CALL	MoveToStart
-	CALL	MoveForwardScanning
-	JUMP	InfLoop
+
+	;; CALL	MoveToStart	
+	;; CALL	MoveForwardScanning
+	;; CALL    MakeSquare
+	LOAD   Mask2
+	OR     Mask3
+	OR     Mask5
+	OR     Mask0
+	OUT    SONAREN ;Enable the necessary sonars
+	CALL	MakeParallel
+	JUMP	Die
+
 	
-InfLoop:
+InfLoop:	
 	JUMP   InfLoop
 	; note that the movement API will still be running during this
 	; infinite loop, because it uses the timer interrupt, so the
@@ -133,66 +142,77 @@ MakeSquare:
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
 	
-	LOADI -440 ; move back 1.5 ft
+	LOADI &H144
 	STORE MoveDistance
-	CALL  MoveForDistance
+	CALL  MoveX
 
 	;; Changed LOADI Ft4 to LOAD Ft3, if this messes it up change that back
 	; Do 4 times
-	LOADI   Ft3
-	STORE  MoveDistance
-	CALL   MoveForDistance
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI   Ft3
+	LOADI  &H288
 	STORE  MoveDistance
-	CALL   MoveForDistance
+	CALL   MoveY
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI   Ft3
+	LOADI  &H288
 	STORE  MoveDistance
-	CALL   MoveForDistance
+	CALL   MoveX
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI   Ft3
+	LOADI  &H288
 	STORE  MoveDistance
-	CALL   MoveForDistance
-	LOADI  45
+	CALL   MoveY
+	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-; 	LOADI  -90
-; 	STORE  MoveHeading
-; 	CALL   Turn
+	LOADI  &H144
+	STORE  MoveDistance
+	CALL   MoveX
+	LOADI  90
+	STORE  MoveHeading
+	CALL   Turn
 	RETURN
 
 MoveToStart:
-	LOADI 69
-	OUT   LCD
-
 	LOAD   Mask2
 	OR     Mask3
 	OR     Mask5
-	OR	   Mask0
+	OR     Mask0
 	OUT    SONAREN ;Enable the necessary sonars
 	
 	LOADI  90     ;Go Upwards 4 ft
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft3
+	LOAD   Ft4
 	STORE  MoveDistance
-	CALL   MoveForDistance
-	
-	LOADI  -45
+	CALL   MoveY
+
+	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft3_5
+	LOAD   Ft2_5
 	STORE  MoveDistance
-	CALL   MoveForDistance
+	CALL   MoveX
+
+	LOADI  90
+	STORE  MoveHeading
+	CALL   Turn
+	LOAD   Ft1
+	STORE  MoveDistance
+	CALL   MoveY
 	
-	LOADI  -45
+	;; LOADI  -45
+	;; STORE  MoveHeading
+	;; CALL   Turn
+	;; LOAD   Ft3_5
+	;; STORE  MoveDistance
+	;; CALL   MoveForDistance
+
+	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
@@ -200,38 +220,74 @@ MoveToStart:
 
 TempDist:	DW 0
 MakeParallel:
-	IN		Dist0
+	IN	Dist0
 	STORE	TempDist
 	; This val needs to be tested, in case its too slow.
 	; We also want it to be accurate tho
-	LOADI	-2
-	STORE	MoveHeading
-	CALL	Turn
-	IN		Dist0
-	SUB		TempDist
+	LOAD	RSlow
+	OUT 	RVELCMD
+	LOAD	FSlow
+	OUT	LVELCMD
+	IN	Dist0
+	SUB	TempDist
 	JPOS	MakeParallel
 	JZERO	MakeParallel
 	; This should be the opposite of the number above
-	LOADI	2
-	STORE	MoveHeading
-	CALL	Turn
+	LOADI	0
+	OUT 	RVELCMD
+	OUT	LVELCMDn
 	RETURN
 	
+MoveX:
+	IN	THETA
+	STORE	DTheta
+	LOAD	FMid
+	STORE	DVel
+	IN      XPOS
+	STORE   StoreX
+DistloopX:
+	CALL	ControlMovement
+	IN	XPOS
+	OUT	SSEG1
+	LOAD	StoreX
+	OUT	SSEG2
+	IN      XPOS
+	SUB     StoreX
+	CALL    Abs
+	OUT	LCD
+	SUB     MoveDistance
+	JNEG	DistloopX
+
+	LOAD	Zero
+	STORE	DVel
+	CALL	ControlMovement
+	RETURN
 	
-;; ScanForObstacle:		
+MoveY:
+	IN	THETA
+	STORE	DTheta
+	LOAD	FMid
+	STORE	DVel
+	IN      YPOS
+	STORE   StoreY
+DistloopY:
+	CALL	ControlMovement
+	IN	YPOS
+	OUT	SSEG1
+	LOAD	StoreY
+	OUT	SSEG2
+	IN      YPOS
+	SUB     StoreY
+	CALL    Abs
+	OUT	LCD
+	SUB     MoveDistance
+	JNEG	DistloopY
+
+	LOAD	Zero
+	STORE	DVel
+	CALL	ControlMovement
+	RETURN
 	
-;; 	;IN     DIST2
-;; 	;STORE  Sensor2Dist
-;; 	;IN     DIST3
-;; 	;STORE  Sensor3Dist
-;; ScanForObstaclesLoop:
-;; 	LOADI  1
-;; 	STORE  MoveHeading
-;; 	CALL   Turn
-;; 	IN	   DIST2
-;; 	OUT	   SSEG1
-;; 	;IN     DIST3
-;; 	;OUT    SSEG2
 	
 ;; 	;NEW STUFF, 11/12
 MoveForwardScanning:
@@ -264,9 +320,9 @@ MoveToNewObstacle:
 	LOAD	Zero
 	STORE	DVel
 	CALL	ControlMovement
-	LOADI	100
+	LOAD	Ft1
 	STORE   MoveDistance
-	CALL    MoveForDistance
+	CALL    MoveX
 	IN	Dist5
 	SUB	Ft1_5
 	STORE	ObstDistance
@@ -276,11 +332,11 @@ MoveToNewObstacle:
 	CALL	Turn
 	LOAD	ObstDistance
 	STORE   MoveDistance
-	CALL	MoveForDistance
+	CALL	MoveY
 	CALL	MakeSquare
 	LOAD	ObstDistance
 	STORE   MoveDistance
-	CALL    MoveForDistance
+	CALL    MoveY
 	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
 	LOADI   -45
 	STORE   MoveHeading
@@ -943,6 +999,9 @@ Sensor3Dist: DW 0
 Threshold:   DW 450
 ErrorNum:    DW &H7F00
 
+StoreY:	     DW 0
+StoreX:	     DW 0
+
 ;***************************************************************
 ;* Constants
 ;* (though there is nothing stoppfing you from writing to these)
@@ -1051,3 +1110,4 @@ RIN:      EQU &HC8
 LIN:      EQU &HC9
 IR_HI:    EQU &HD0  ; read the high word of the IR receiver (OUT will clear both words)
 IR_LO:    EQU &HD1  ; read the low word of the IR receiver (OUT will clear both words)
+	
