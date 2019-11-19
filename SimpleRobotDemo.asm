@@ -372,6 +372,7 @@ ContObstacle:
 	SUB	One
 	STORE	TempNum
 	JPOS	ContSquare
+	JPOS	ContObstacle
 	JUMP	InfLoop
 PassLoop:	
 	LOADI  90
