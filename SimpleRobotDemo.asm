@@ -83,14 +83,38 @@ Main:
 ; 	STORE	MoveDistance
 ; 	CALL	MoveForDistance
 
-	;; CALL	MoveToStart	
-	;; CALL	MoveForwardScanning
-	;; CALL    MakeSquare
 	LOAD   Mask2
 	OR     Mask3
 	OR     Mask5
 	OR     Mask0
 	OUT    SONAREN ;Enable the necessary sonars
+
+	IN	Switches
+	STORE	Temp
+	AND	DieMask
+	OUT	ToDie
+	OUT	SSEG1
+	LOAD	Temp
+	AND	OnlyClose
+	SHIFT	-1
+	OUT	SSEG2
+	JNEG    FarCode
+	LOAD	AltScanDist
+	STORE	ScanDist
+FarCode:
+	LOAD	Temp
+	AND	NmSqrMask
+	SHIFT	-2
+	STORE	NumRotations
+	OUT 	LCD
+	LOAD	Temp
+	AND	OffsetMask
+	SHIFT	-5
+	STORE	Offset
+	;; MAIN CODE
+	;; CALL	MoveToStart	
+	;; CALL	MoveForwardScanning
+	;; CALL    MakeSquare
 	CALL	MakeParallel
 	JUMP	Die
 
@@ -235,7 +259,7 @@ MakeParallel:
 	; This should be the opposite of the number above
 	LOADI	0
 	OUT 	RVELCMD
-	OUT	LVELCMDn
+	OUT	LVELCMD
 	RETURN
 	
 MoveX:
@@ -309,7 +333,7 @@ FDistloop:
 	IN	Dist5
 	OUT	SSEG1
 	JNEG    FDistloop
-	SUB	Ft8
+	SUB	ScanDist
 	OUT	SSEG2
 	JNEG	MoveToNewObstacle
 	JUMP	FDistloop
@@ -1032,6 +1056,11 @@ Mask4:    DW &B00010000
 Mask5:    DW &B00100000
 Mask6:    DW &B01000000
 Mask7:    DW &B10000000
+DieMask:	DW &B00000001
+OnlyClose:	DW &B00000010
+NmSqrMask:	DW &B00011100
+OffsetMask:	DW &B11100000
+
 LowByte:  DW &HFF      ; binary 00000000 1111111
 LowNibl:  DW &HF       ; 0000 0000 0000 1111
 
@@ -1045,8 +1074,8 @@ Ft2_5:     DW 733
 Ft3:       DW 879
 Ft3_5:     DW 1026
 Ft4:       DW 1172
-Ft8:       DW 2344
-Ft9:       DW 2637
+ScanDist:    	   DW 2344
+AltScanDist:  	     DW 1172
 Deg90:     DW 90        ; 90 degrees in odometer units
 Deg180:    DW 180       ; 180
 Deg270:    DW 270       ; 270
@@ -1065,6 +1094,10 @@ I2CRCmd:  DW &H0190    ; write nothing, read one byte, addr 0x90
 MoveDistance:    DW 0
 MoveHeading:	 DW 0
 ObstDistance:	 DW 0
+
+ToDie:		 DW 0
+ObstaclesToTry:	 DW 3
+NumRotations:	 DW 0
 
 DataArray:
 	DW 0
