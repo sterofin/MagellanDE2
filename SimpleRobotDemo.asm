@@ -1002,6 +1002,8 @@ ErrorNum:    DW &H7F00
 StoreY:	     DW 0
 StoreX:	     DW 0
 
+Offset:	     DW 0
+
 ;***************************************************************
 ;* Constants
 ;* (though there is nothing stoppfing you from writing to these)
