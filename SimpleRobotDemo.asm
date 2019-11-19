@@ -121,6 +121,9 @@ FarCode:
 	;; MAIN CODE
 	;; CALL	MoveToStart	
 	;; CALL	MoveForwardScanning
+	LOADI	-45
+	STORE	MoveHeading
+	CALL 	Turn
 	CALL	MakeParallel
 	JUMP	Die
 
@@ -244,21 +247,24 @@ MoveToStart:
 	CALL   Turn
 	RETURN
 	
-
+OldDist:	DW 0
 TempDist:	DW 0
 MakeParallel:
 	IN	Dist0
 	STORE	TempDist
 	; This val needs to be tested, in case its too slow.
 	; We also want it to be accurate tho
-	LOAD	RSlow
+	LOADI	-150
 	OUT 	RVELCMD
-	LOAD	FSlow
-	OUT	LVELCMD
-	IN	Dist0
-	SUB	TempDist
-	JPOS	MakeParallel
-	JZERO	MakeParallel
+	LOADI	150
+	OUT		LVELCMD
+Looper:
+	LOAD 	TempDist
+	STORE	OldDist
+	IN		Dist0
+	STORE	TempDist
+	SUB		OldDist
+	JNEG	Looper
 	; This should be the opposite of the number above
 	LOADI	0
 	OUT 	RVELCMD
@@ -383,11 +389,14 @@ PassLoop:
 	STORE   MoveDistance
 	CALL    MoveY
 	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
-	LOADI   -45
+	;; LOADI   -45
+	;; STORE   MoveHeading
+	;; CALL	Turn
+	;; ; This function should complete the turn slowly, but check the sonars to try to make it parallel.
+	;; CALL	MakeParallel
+	LOADI   -90
 	STORE   MoveHeading
-	CALL	Turn
-	; This function should complete the turn slowly, but check the sonars to try to make it parallel.
-	CALL	MakeParallel
+	CALL Turn
 	LOAD	Ft1
 	STORE   MoveDistance
 	CALL    MoveX
