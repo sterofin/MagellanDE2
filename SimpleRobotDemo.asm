@@ -89,10 +89,10 @@ Main:
 	OR     Mask0
 	OUT    SONAREN ;Enable the necessary sonars
 
-	IN	Switches
+	IN	SWITCHES
 	STORE	Temp
 	AND	DieMask
-	OUT	ToDie
+	STORE	ToDie
 	OUT	SSEG1
 	LOAD	Temp
 	AND	OnlyClose
@@ -111,11 +111,11 @@ FarCode:
 	AND	OffsetMask
 	SHIFT	-5
 	STORE	Offset
+
 	;; MAIN CODE
-	;; CALL	MoveToStart	
-	;; CALL	MoveForwardScanning
-	;; CALL    MakeSquare
-	CALL	MakeParallel
+	CALL	MoveToStart	
+	CALL	MoveForwardScanning
+	;; CALL	MakeParallel
 	JUMP	Die
 
 	
@@ -379,60 +379,6 @@ Kill:
 	CALL	ControlMovement
 	JUMP    InfLoop
 	
-ScanSensor2:
-	LOAD   Sensor2Dist
-	OUT    SSEG2
-	IN     DIST2
-	SUB    ErrorNum
-	;JPOS   ScanForObstaclesLoop
-	IN     DIST2
-	SUB    Sensor2Dist
-	;OUT    LCD
-	ADD    Threshold
-	;OUT    SSEG1
-	JNEG   FoundObstacle2
-	IN     DIST2
-	STORE  Sensor2Dist
-	
-; ScanSensor3:
-	; IN     DIST3
-	; SUB    ErrorNum
-	; JPOS   ScanForObstaclesLoop
-	; IN     DIST3
-	; SUB    Sensor3Dist
-	; ADD    Threshold
-	; ;OUT    SSEG2
-	; JNEG   FoundObstacle3
-	; IN     DIST3
-	; STORE  Sensor3Dist
-	
-	;JUMP   ScanForObstaclesLoop
-FoundObstacle2:
-	OUT LCD
-	;IN     DIST2
-	;STORE  Sensor2Dist
-	LOADI  -12
-	STORE  MoveHeading
-	CALL   Turn
-	IN     DIST2
-	SUB    Ft1_5
-	STORE  MoveDistance
-	CALL   MoveForDistance
-	RETURN
-; FoundObstacle3:
-	; OUT LCD
-	; JUMP InfLoop
-	; ;IN     DIST3
-	; ;STORE  Sensor3Dist
-	; LOADI  12
-	; STORE  MoveHeading
-	; CALL   Turn
-	; IN     DIST3
-	; SUB    Ft1_5
-	; STORE  MoveDistance
-	; CALL   MoveForDistance
-	; RETURN
-	;go around in square
 ;Rotates the robot. Place relative angle in MoveHeading, then call.
 Turn:
 	IN    Theta
