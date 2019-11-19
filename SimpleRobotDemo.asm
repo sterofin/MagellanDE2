@@ -175,6 +175,7 @@ MoveToStart:
 	LOAD   Mask2
 	OR     Mask3
 	OR     Mask5
+	OR	   Mask0
 	OUT    SONAREN ;Enable the necessary sonars
 	
 	LOADI  90     ;Go Upwards 4 ft
@@ -197,6 +198,26 @@ MoveToStart:
 	RETURN
 	
 
+TempDist:	DW 0
+MakeParallel:
+	IN		Dist0
+	STORE	TempDist
+	; This val needs to be tested, in case its too slow.
+	; We also want it to be accurate tho
+	LOADI	-2
+	STORE	MoveHeading
+	CALL	Turn
+	IN		Dist0
+	SUB		TempDist
+	JPOS	MakeParallel
+	JZERO	MakeParallel
+	; This should be the opposite of the number above
+	LOADI	2
+	STORE	MoveHeading
+	CALL	Turn
+	RETURN
+	
+	
 ;; ScanForObstacle:		
 	
 ;; 	;IN     DIST2
@@ -260,9 +281,12 @@ MoveToNewObstacle:
 	LOAD	ObstDistance
 	STORE   MoveDistance
 	CALL    MoveForDistance
-	LOADI   -90
+	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
+	LOADI   -45
 	STORE   MoveHeading
 	CALL	Turn
+	; This function should complete the turn slowly, but check the sonars to try to make it parallel.
+	CALL	MakeParallel
 	LOAD	Ft1
 	STORE   MoveDistance
 	CALL    MoveForDistance
