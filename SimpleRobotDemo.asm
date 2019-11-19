@@ -173,6 +173,7 @@ MakeSquare:
 	STORE  MoveDistance
 	CALL   MoveX
 	LOADI  90
+	ADD    Offset
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
