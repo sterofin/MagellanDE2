@@ -119,9 +119,10 @@ FarCode:
 	STORE	Offset
 
 	;; MAIN CODE
-	;; CALL	MoveToStart	
-	;; CALL	MoveForwardScanning
-	CALL	MakeParallel
+	 CALL	MoveToStart	
+	 CALL	MoveForwardScanning
+	
+	;; CALL	MakeParallel
 	JUMP	Die
 
 	
@@ -383,11 +384,14 @@ PassLoop:
 	STORE   MoveDistance
 	CALL    MoveY
 	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
-	LOADI   -45
+	;; LOADI   -45
+	;; STORE   MoveHeading
+	;; CALL	Turn
+	;; ; This function should complete the turn slowly, but check the sonars to try to make it parallel.
+	;; CALL	MakeParallel
+	LOADI   -90
 	STORE   MoveHeading
-	CALL	Turn
-	; This function should complete the turn slowly, but check the sonars to try to make it parallel.
-	CALL	MakeParallel
+	CALL Turn
 	LOAD	Ft1
 	STORE   MoveDistance
 	CALL    MoveX
