@@ -92,7 +92,7 @@ CONTENT
            04F : B85A;  -- 	LOADI  90
            050 : 12E9;  -- 	STORE  MoveHeading
            051 : 810C;  -- 	CALL   Turn
-           052 : BA40;  -- 	LOADI  &H240
+           052 : BA80;  -- 	LOADI  &H280
            053 : 12E8;  -- 	STORE  MoveDistance
            054 : 8093;  -- 	CALL   MoveX
            055 : B85A;  -- 	LOADI  90
@@ -104,10 +104,10 @@ CONTENT
            05B : B85A;  -- 	LOADI  90
            05C : 12E9;  -- 	STORE  MoveHeading
            05D : 810C;  -- 	CALL   Turn
-           05E : B900;  -- 	LOADI  &H100
+           05E : B910;  -- 	LOADI  &H110
            05F : 12E8;  -- 	STORE  MoveDistance
            060 : 8093;  -- 	CALL   MoveX
-           061 : BFB8;  -- 	LOADI  -72
+           061 : BFB2;  -- 	LOADI  -78
            062 : 12E9;  -- 	STORE  MoveHeading
            063 : 810C;  -- 	CALL   Turn
            064 : 8800;  -- 	RETURN

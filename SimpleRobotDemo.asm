@@ -160,7 +160,7 @@ MakeSquare:
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H250
+	LOADI  &H280
 	STORE  MoveDistance
 	CALL   MoveX
 	LOADI  90
