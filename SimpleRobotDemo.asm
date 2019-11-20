@@ -141,41 +141,41 @@ MakeCircle:
 	
 	
 MakeSquare:
-	LOADI  100
+	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
 	
-	LOADI &Hd5
+	LOADI &H150
 	STORE MoveDistance
 	CALL  MoveX
 
 	;; Changed LOADI Ft4 to LOAD Ft3, if this messes it up change that back
 	; Do 4 times
-	LOADI  -90
+	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H288
+	LOADI  &H200
 	STORE  MoveDistance
 	CALL   MoveY
-	LOADI  -90
+	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H288
+	LOADI  &H222
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  -90
+	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H288
+	LOADI  &H200
 	STORE  MoveDistance
 	CALL   MoveY
-	LOADI  -90
+	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H150
+	LOADI  &H100
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  111
+	LOADI  -72
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
@@ -197,7 +197,7 @@ MoveToStart:
 	LOADI  -90
 	STORE  MoveHeading
 	CALL   Turn
-	LOAD   Ft2_5
+	LOAD   Ft1_5
 	STORE  MoveDistance
 	CALL   MoveX
 
@@ -215,7 +215,7 @@ MoveToStart:
 	;; STORE  MoveDistance
 	;; CALL   MoveForDistance
 
-	LOADI  -90
+	LOADI  -80
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
@@ -328,7 +328,7 @@ MoveToNewObstacle:
 	LOAD	Zero
 	STORE	DVel
 	CALL	ControlMovement
-	LOAD	Ft1
+	LOADI	150
 	STORE   MoveDistance
 	CALL    MoveX
 	IN	Dist5
@@ -343,7 +343,7 @@ MoveToNewObstacle:
 	CALL	MoveY
 	CALL	MakeSquare
 	LOAD	ObstDistance
-	SUB 	Ft1
+	ADDI    -50
 	STORE   MoveDistance
 	CALL    MoveY
 	; Only turn 45 so we are fairly sure the bot is still pointing near the wall.
@@ -352,6 +352,11 @@ MoveToNewObstacle:
 	CALL	Turn
 	; This function should complete the turn slowly, but check the sonars to try to make it parallel.
 	;; CALL	MakeParallel
+	LOAD    NumObstacles
+	SUB     One
+	STORE   NumObstacles
+	JZERO   Die
+	
 	LOAD	Ft1
 	STORE   MoveDistance
 	CALL    MoveX
@@ -418,6 +423,8 @@ FoundObstacle2:
 	; RETURN
 	;go around in square
 ;Rotates the robot. Place relative angle in MoveHeading, then call.
+ErrorVal:	DW	2
+Diff:		DW	0
 Turn:
 	IN    Theta
 	ADD   MoveHeading
@@ -427,11 +434,28 @@ TurnAgain:
 	CALL  ControlMovement
 	IN	  Theta
 	SUB	  DTheta
-	JZERO TermTurn
-	JUMP  TurnAgain
+	STORE	Diff
+	JNEG	NegativeSubFunc
+	JPOS	PositiveSubFunc
+	JZERO	TermTurn
+
 TermTurn:
 	RETURN
 	;MAY NEED TIMEOUT
+	
+PositiveSubFunc:
+	LOAD	Diff
+	SUB		ErrorVal
+	JNEG	TermTurn
+	JZERO	TermTurn
+	JUMP	TurnAgain
+
+NegativeSubFunc:
+	LOAD	Diff
+	ADD		ErrorVal
+	JPOS	TermTurn
+	JZERO	TermTurn
+	JUMP	TurnAgain
 
 ;Move a certain amount of distance specified by a number stored in MoveDistance.
 MoveForDistance:
@@ -1007,6 +1031,8 @@ Sensor2Dist: DW 0
 Sensor3Dist: DW 0
 Threshold:   DW 450
 ErrorNum:    DW &H7F00
+
+NumObstacles: DW 3
 
 StoreY:	     DW 0
 StoreX:	     DW 0
