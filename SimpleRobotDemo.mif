@@ -80,7 +80,7 @@ CONTENT
            043 : BFA6;  -- 	LOADI  -90
            044 : 12E9;  -- 	STORE  MoveHeading
            045 : 810C;  -- 	CALL   Turn ; initial Left Turn to set up Diamond
-           046 : B950;  -- 	LOADI &H150
+           046 : B940;  -- 	LOADI &H140
            047 : 12E8;  -- 	STORE MoveDistance
            048 : 8093;  -- 	CALL  MoveX
            049 : B85A;  -- 	LOADI  90
@@ -92,7 +92,7 @@ CONTENT
            04F : B85A;  -- 	LOADI  90
            050 : 12E9;  -- 	STORE  MoveHeading
            051 : 810C;  -- 	CALL   Turn
-           052 : BA22;  -- 	LOADI  &H222
+           052 : BA40;  -- 	LOADI  &H240
            053 : 12E8;  -- 	STORE  MoveDistance
            054 : 8093;  -- 	CALL   MoveX
            055 : B85A;  -- 	LOADI  90

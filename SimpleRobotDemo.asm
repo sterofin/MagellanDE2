@@ -145,7 +145,7 @@ MakeSquare:
 	STORE  MoveHeading
 	CALL   Turn ; initial Left Turn to set up Diamond
 	
-	LOADI &H150
+	LOADI &H140
 	STORE MoveDistance
 	CALL  MoveX
 
@@ -160,7 +160,7 @@ MakeSquare:
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H222
+	LOADI  &H250
 	STORE  MoveDistance
 	CALL   MoveX
 	LOADI  90
@@ -172,10 +172,10 @@ MakeSquare:
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H100
+	LOADI  &H110
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  -72
+	LOADI  -78
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
