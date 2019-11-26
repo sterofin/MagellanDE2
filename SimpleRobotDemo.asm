@@ -154,28 +154,28 @@ MakeSquare:
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H200
+	LOADI  &H280
 	STORE  MoveDistance
 	CALL   MoveY
+	LOADI  90
+	STORE  MoveHeading
+	CALL   Turn
+	LOADI  &H2c0
+	STORE  MoveDistance
+	CALL   MoveX
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
 	LOADI  &H280
 	STORE  MoveDistance
-	CALL   MoveX
-	LOADI  90
-	STORE  MoveHeading
-	CALL   Turn
-	LOADI  &H200
-	STORE  MoveDistance
 	CALL   MoveY
 	LOADI  90
 	STORE  MoveHeading
 	CALL   Turn
-	LOADI  &H110
+	LOADI  &H180
 	STORE  MoveDistance
 	CALL   MoveX
-	LOADI  -78
+	LOADI  -86
 	STORE  MoveHeading
 	CALL   Turn
 	RETURN
@@ -298,6 +298,7 @@ DistloopY:
 	
 	
 ;; 	;NEW STUFF, 11/12
+FirstObs:	DW	1
 MoveForwardScanning:
 	IN      THETA
 	STORE   DTheta
@@ -317,7 +318,7 @@ FDistloop:
 	IN	Dist5
 	OUT	SSEG1
 	JNEG    FDistloop
-	SUB	Ft8
+	SUB	Ft6
 	OUT	SSEG2
 	JNEG	MoveToNewObstacle
 	JUMP	FDistloop
@@ -328,9 +329,14 @@ MoveToNewObstacle:
 	LOAD	Zero
 	STORE	DVel
 	CALL	ControlMovement
+	LOAD    FirstObs
+	JPOS    SkipLabel
 	LOADI	150
 	STORE   MoveDistance
 	CALL    MoveX
+SkipLabel:
+	LOAD	Zero
+	STORE	FirstObs
 	IN	Dist5
 	SUB	Ft2
 	STORE	ObstDistance
@@ -357,7 +363,7 @@ MoveToNewObstacle:
 	STORE   NumObstacles
 	JZERO   Die
 	
-	LOAD	Ft1
+	LOAD	Ft2
 	STORE   MoveDistance
 	CALL    MoveX
 	JUMP    MoveForwardScanning
@@ -1078,6 +1084,7 @@ Ft2_5:     DW 733
 Ft3:       DW 879
 Ft3_5:     DW 1026
 Ft4:       DW 1172
+Ft6:       DW 1800
 Ft8:       DW 2344
 Ft9:       DW 2637
 Deg90:     DW 90        ; 90 degrees in odometer units
